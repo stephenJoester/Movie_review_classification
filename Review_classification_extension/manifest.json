@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "Movie Review Classification",
+    "version": "1.0.0",
+    "description": "An extension to analyze sentiment on IMDb",
+    "permissions" : ["tabs", "storage","scripting"], 
+    "host_permissions" : ["*://*.imdb.com/*"],
+    "background": {
+        "service_worker": "background.js"
+      },
+    "content_scripts": [
+        {
+        "matches": ["*://*.imdb.com/*"],
+        "js": ["contentScript.js"],
+        "css" : ["styles.css"]
+        }
+    ],
+    "action" :  {
+        "default_popup" : "popup.html",
+        "default_title" : "Movie Review Classification"
+    }
+}
