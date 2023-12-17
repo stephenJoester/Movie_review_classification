@@ -5,6 +5,18 @@
     // let commentsArray
     let results
 
+    // Default value
+    let extensionEnabled = true; 
+
+    chrome.storage.sync.get('extensionEnabled', (data) => {
+        // Default to true if not set
+        extensionEnabled = data.extensionEnabled !== false
+
+        if (extensionEnabled) {
+            console.log("Extension is enabled");
+        }
+    })
+
     console.log("contentScript");
 
     chrome.runtime.onMessage.addListener(async (message, sender) => {
@@ -12,7 +24,7 @@
         const { type, imdbId } = message;
         console.log(imdbId);
 
-        if (type === "NEW") {
+        if (type === "NEW" && extensionEnabled) {
             const comments = document.querySelectorAll(".text");
             const commentsArray = Array.from(comments).map(comment => comment.textContent);
             results = await getClassificationResult(commentsArray)
@@ -117,7 +129,9 @@
 
     load_moreBtn.addEventListener("click", () => {
         console.log("Load more clicked");
-        observeNewReviews()
+        if (extensionEnabled) {
+            observeNewReviews()
+        }
     })
 
 })();
